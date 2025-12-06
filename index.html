@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ServiceNow CSA Quiz – Full Bank</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background:
+        radial-gradient(circle at top left, #1f2937 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1024px;
+      padding: 0;
+    }
+
+    .card {
+      background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(15, 23, 42, 0.92)
+      );
+      border-radius: 20px;
+      padding: 20px 22px 18px;
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(148, 163, 184, 0.25);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      backdrop-filter: blur(18px);
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        padding: 24px 28px 20px;
+      }
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      margin: 0 0 4px;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1 span.logo-pill {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(129, 140, 248, 0.7);
+      background: radial-gradient(circle at top, #4f46e5, #0f172a);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #e5e7eb;
+    }
+
+    .subtle {
+      color: #9ca3af;
+      font-size: 0.85rem;
+    }
+
+    #topBar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    #topBar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #topBar-mode {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    label {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    select,
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition:
+        background 0.12s ease,
+        transform 0.08s ease,
+        box-shadow 0.12s ease,
+        border-color 0.12s ease;
+      outline: none;
+    }
+
+    select {
+      background: rgba(2, 6, 23, 0.9);
+      color: #e5e7eb;
+      border: 1px solid #4b5563;
+    }
+
+    select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #4f46e5, #06b6d4);
+      color: white;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.45);
+    }
+
+    button.secondary {
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      border: 1px solid #4b5563;
+    }
+
+    button.secondary.subtle-btn {
+      font-size: 0.8rem;
+      padding-inline: 10px;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.6);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.6);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    #questionCard {
+      margin-top: 10px;
+      padding: 14px 14px 12px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top left, #020617 0, #020617 60%, #020617);
+      border: 1px solid rgba(55, 65, 81, 0.8);
+    }
+
+    #questionMetaRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    #questionCounter {
+      font-weight: 500;
+    }
+
+    #modeChip {
+      padding: 2px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(129, 140, 248, 0.7);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #c7d2fe;
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(15, 23, 42, 0.9));
+    }
+
+    #questionText {
+      font-size: 1.05rem;
+      margin: 4px 0 12px;
+      line-height: 1.45;
+    }
+
+    #optionsContainer {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .option {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      cursor: pointer;
+      transition:
+        transform 0.08s ease,
+        box-shadow 0.08s ease,
+        border-color 0.1s,
+        background 0.08s ease;
+      font-size: 0.94rem;
+    }
+
+    .option:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.4);
+      border-color: #6366f1;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+    }
+
+    .option.correct {
+      background: rgba(22, 163, 74, 0.15);
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.6);
+    }
+
+    .option.wrong {
+      background: rgba(220, 38, 38, 0.12);
+      border-color: #ef4444;
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.6);
+    }
+
+    .option.selected {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.7);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+    }
+
+    #feedback {
+      margin-top: 8px;
+      min-height: 20px;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .correct-text {
+      color: #22c55e;
+    }
+
+    .wrong-text {
+      color: #f97316;
+    }
+
+    #flashcardAnswer {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      color: #d1d5db;
+    }
+
+    #flashcardAnswer button {
+      margin-top: 4px;
+    }
+
+    #navBar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      justify-content: space-between;
+    }
+
+    #navLeft,
+    #navRight {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    #statsRow {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: #9ca3af;
+    }
+
+    #stats {
+      font-size: 0.82rem;
+    }
+
+    #progressOuter {
+      flex: 1 1 140px;
+      height: 6px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.85);
+      overflow: hidden;
+    }
+
+    #progressBar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #4f46e5, #22c55e, #06b6d4);
+      transition: width 0.18s ease-out;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.82);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 12px;
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background: radial-gradient(circle at top left, #020617, #020617 70%);
+      border-radius: 18px;
+      padding: 18px 18px 14px;
+      max-width: 720px;
+      width: 100%;
+      max-height: 80vh;
+      overflow: auto;
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85);
+    }
+
+    .modal-content h3 {
+      margin: 0 0 4px;
+      font-size: 1rem;
+    }
+
+    #weakList {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .weak-item {
+      padding: 10px 10px 9px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      font-size: 0.86rem;
+    }
+
+    .weak-title {
+      font-size: 0.88rem;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .weak-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .weak-actions button {
+      font-size: 0.8rem;
+      padding-inline: 10px;
+    }
+
+    footer {
+      margin-top: 14px;
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    footer span.dot {
+      opacity: 0.4;
+      padding: 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>
+        <span class="logo-pill">CSA</span>
+        ServiceNow CSA Quiz
+      </h1>
+      <div class="subtle">
+        Full bank (CSA exam, SkillCert, Dumps + Blueprint domains) with weak-points, jump-to-question &amp; flashcards.
+      </div>
+
+      <div id="topBar">
+        <div id="topBar-left">
+          <div>
+            <label for="quizSelect">Category</label><br />
+            <select id="quizSelect"></select>
+          </div>
+        </div>
+        <div id="topBar-mode">
+          <button id="modeToggleBtn" class="secondary subtle-btn">Mode: Quiz</button>
+          <button id="jumpBtn" class="secondary subtle-btn">Go to Question</button>
+        </div>
+      </div>
+
+      <div id="questionCard">
+        <div id="questionMetaRow">
+          <div id="questionCounter">Question 1 of 1</div>
+          <div id="modeChip">QUIZ MODE</div>
+        </div>
+        <div id="questionText"></div>
+        <ul id="optionsContainer"></ul>
+
+        <!-- For multi-select questions -->
+        <button id="submitMultiBtn" class="primary" style="display:none;margin-top:8px;">
+          Check Answer
+        </button>
+
+        <!-- Flashcard answer area -->
+        <div id="flashcardAnswer"></div>
+
+        <div id="feedback" class="feedback"></div>
+      </div>
+
+      <div id="navBar">
+        <div id="navLeft">
+          <button id="prevBtn" class="secondary">Previous</button>
+          <button id="nextBtn" class="primary">Next</button>
+        </div>
+        <div id="navRight">
+          <button id="weakBtn" class="secondary">Weak Points</button>
+          <button id="retakeBtn" class="secondary">Retake Weak Points</button>
+          <button id="exitRetakeBtn" class="secondary" style="display:none;">Exit Retake</button>
+        </div>
+      </div>
+
+      <div id="statsRow">
+        <div id="stats">
+          Correct: <span id="correctCount">0</span>
+          &nbsp;|&nbsp;
+          Wrong: <span id="wrongCount">0</span>
+          &nbsp;|&nbsp;
+          Score: <span id="scorePercent">0%</span>
+        </div>
+        <div id="progressOuter">
+          <div id="progressBar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weak points modal -->
+  <div id="weakModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Weak Points</h3>
+      <p class="subtle">
+        Questions you've missed in this category. Jump to any question, remove it, or retake only these.
+      </p>
+      <ul id="weakList"></ul>
+      <div style="margin-top:10px; display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+        <button id="retakeInsideWeakBtn" class="primary">Retake All Weak Points</button>
+        <button id="closeWeakBtn" class="secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    ServiceNow CSA Prep <span class="dot">•</span> Local progress saved in your browser
+  </footer>
+
+  <!-- Question bank (generated) -->
+  <script src="questions.js"></script>
+  <script>
+    // expects global QUESTION_SETS from questions.js
+
+    const STORAGE_PREFIX = 'sn_csa_quiz_';
+
+    const QUIZ_KEYS = {
+      csa: 'CSA Exam Questions',
+      skillcert: 'SkillCert Questions',
+      youtube: 'YouTube Dumps',
+      other: 'Other Sources',
+      bp1: 'Blueprint 1 – Platform Overview & Navigation',
+      bp2: 'Blueprint 2 – Instance Configuration',
+      bp3: 'Blueprint 3 – Collaboration & UI',
+      bp4: 'Blueprint 4 – Self Service & Automation',
+      bp5: 'Blueprint 5 – DB & Security',
+      bp6: 'Blueprint 6 – Data Migration & Integration'
+    };
+
+    let currentQuizKey = 'csa';
+    let rawQuestions = [];
+    let currentQuestions = [];
+    let fullOrder = [];      // full list [0..n-1]
+    let currentOrder = [];   // can be subset in retake mode
+    let currentIndex = 0;    // index inside currentOrder
+    let stats = { correct: 0, wrong: 0 };
+    let weakPoints = [];     // [{ qIdx, count }]
+    let inRetakeMode = false;
+
+    // mode: 'quiz' or 'flashcard'
+    let mode = 'quiz';
+    let flashcardAnswerShown = false;
+
+    // multi-select state
+    let currentSelection = new Set();
+
+    function getStorageKey(key) {
+      return STORAGE_PREFIX + key;
+    }
+
+    function cloneQuestionsForMode() {
+      currentQuestions = rawQuestions.map(q => ({
+        ...q,
+        explanation: q.explanation || ''
+      }));
+    }
+
+    function loadQuizState() {
+      rawQuestions = QUESTION_SETS[currentQuizKey] || [];
+      cloneQuestionsForMode();
+
+      fullOrder = currentQuestions.map((_, i) => i);
+
+      const raw = localStorage.getItem(getStorageKey(currentQuizKey));
+      if (raw) {
+        try {
+          const saved = JSON.parse(raw);
+          stats = saved.stats || { correct: 0, wrong: 0 };
+          weakPoints = saved.weakPoints || [];
+          currentOrder =
+            saved.currentOrder && saved.currentOrder.length
+              ? saved.currentOrder
+              : [...fullOrder];
+          currentIndex = Math.min(saved.currentIndex || 0, currentOrder.length - 1);
+          inRetakeMode = false; // always start in normal mode
+        } catch (e) {
+          console.warn('Failed to load saved state', e);
+          stats = { correct: 0, wrong: 0 };
+          weakPoints = [];
+          currentOrder = [...fullOrder];
+          currentIndex = 0;
+          inRetakeMode = false;
+        }
+      } else {
+        stats = { correct: 0, wrong: 0 };
+        weakPoints = [];
+        currentOrder = [...fullOrder];
+        currentIndex = 0;
+        inRetakeMode = false;
+      }
+    }
+
+    function saveQuizState() {
+      const payload = {
+        stats,
+        weakPoints,
+        currentOrder,
+        currentIndex
+      };
+      localStorage.setItem(getStorageKey(currentQuizKey), JSON.stringify(payload));
+    }
+
+    function getCurrentQuestionIndex() {
+      if (!currentOrder.length) return 0;
+      return currentOrder[currentIndex] ?? 0;
+    }
+
+    function renderStats() {
+      const correctEl = document.getElementById('correctCount');
+      const wrongEl = document.getElementById('wrongCount');
+      const scoreEl = document.getElementById('scorePercent');
+
+      const total = stats.correct + stats.wrong;
+      const percent = total ? Math.round((stats.correct / total) * 100) : 0;
+
+      correctEl.textContent = stats.correct;
+      wrongEl.textContent = stats.wrong;
+      scoreEl.textContent = percent + '%';
+    }
+
+    function renderQuestion() {
+      const qCounter = document.getElementById('questionCounter');
+      const qTextEl = document.getElementById('questionText');
+      const optionsEl = document.getElementById('optionsContainer');
+      const feedbackEl = document.getElementById('feedback');
+      const exitRetakeBtn = document.getElementById('exitRetakeBtn');
+      const submitMultiBtn = document.getElementById('submitMultiBtn');
+      const flashcardAnswerEl = document.getElementById('flashcardAnswer');
+      const modeChip = document.getElementById('modeChip');
+      const progressBar = document.getElementById('progressBar');
+
+      currentSelection = new Set();
+      flashcardAnswerShown = false;
+
+      submitMultiBtn.style.display = 'none';
+      flashcardAnswerEl.innerHTML = '';
+      feedbackEl.textContent = '';
+      feedbackEl.className = 'feedback';
+
+      modeChip.textContent = mode === 'quiz' ? 'QUIZ MODE' : 'FLASHCARD MODE';
+
+      if (!currentQuestions.length) {
+        qCounter.textContent = 'No questions in this category.';
+        qTextEl.textContent = '';
+        optionsEl.innerHTML = '';
+        if (progressBar) progressBar.style.width = '0%';
+        return;
+      }
+
+      const qIdx = getCurrentQuestionIndex();
+
+      // logical position & total depend on mode (normal vs retake)
+      const logicalIndex = inRetakeMode ? currentIndex + 1 : qIdx + 1;
+      const logicalTotal = inRetakeMode ? currentOrder.length : currentQuestions.length;
+
+      let counterText = `Question ${logicalIndex} of ${logicalTotal}`;
+      if (inRetakeMode) counterText += ' (Retake Weak Points)';
+      if (mode === 'flashcard') counterText += ' – Flashcard';
+      qCounter.textContent = counterText;
+
+      if (progressBar && logicalTotal > 0) {
+        const pct = (logicalIndex / logicalTotal) * 100;
+        progressBar.style.width = pct + '%';
+      }
+
+      const q = currentQuestions[qIdx];
+      qTextEl.textContent = q.question;
+      optionsEl.innerHTML = '';
+
+      const isMulti =
+        Array.isArray(q.correct) && q.correct.length > 1;
+
+      // QUIZ MODE
+      if (mode === 'quiz') {
+        const correctIndices = Array.isArray(q.correct)
+          ? q.correct
+          : [q.correct];
+
+        q.options.forEach((optText, idx) => {
+          const li = document.createElement('li');
+          li.className = 'option';
+          li.textContent = optText;
+
+          if (isMulti) {
+            li.addEventListener('click', () => {
+              if (li.classList.contains('selected')) {
+                li.classList.remove('selected');
+                currentSelection.delete(idx);
+              } else {
+                li.classList.add('selected');
+                currentSelection.add(idx);
+              }
+            });
+          } else {
+            li.addEventListener('click', () =>
+              handleSingleAnswer(idx, li, correctIndices)
+            );
+          }
+
+          optionsEl.appendChild(li);
+        });
+
+        if (isMulti) {
+          submitMultiBtn.style.display = 'inline-block';
+          submitMultiBtn.onclick = () => handleMultiAnswer(qIdx);
+        } else {
+          submitMultiBtn.style.display = 'none';
+        }
+      }
+
+      // FLASHCARD MODE
+      if (mode === 'flashcard') {
+        q.options.forEach((optText) => {
+          const li = document.createElement('li');
+          li.className = 'option';
+          li.textContent = optText;
+          li.style.cursor = 'default';
+          optionsEl.appendChild(li);
+        });
+
+        const btn = document.createElement('button');
+        btn.className = 'secondary subtle-btn';
+        btn.textContent = 'Show Answer & Explanation';
+        btn.onclick = () => showFlashcardAnswer(q);
+        flashcardAnswerEl.appendChild(btn);
+      }
+
+      exitRetakeBtn.style.display = inRetakeMode ? 'inline-block' : 'none';
+    }
+
+    function handleSingleAnswer(selectedIndex, optionElement, correctIndices) {
+      const qIdx = getCurrentQuestionIndex();
+      const q = currentQuestions[qIdx];
+      const feedbackEl = document.getElementById('feedback');
+
+      document.querySelectorAll('#optionsContainer .option').forEach(li => {
+        li.classList.remove('correct', 'wrong');
+      });
+
+      const isCorrect = correctIndices.includes(selectedIndex);
+
+      if (isCorrect) {
+        optionElement.classList.add('correct');
+        feedbackEl.textContent = '✅ Correct';
+        feedbackEl.classList.remove('wrong-text');
+        feedbackEl.classList.add('correct-text');
+        stats.correct += 1;
+      } else {
+        optionElement.classList.add('wrong');
+        feedbackEl.textContent = '❌ Wrong';
+        feedbackEl.classList.remove('correct-text');
+        feedbackEl.classList.add('wrong-text');
+        stats.wrong += 1;
+        addWeakPoint(qIdx);
+
+        document.querySelectorAll('#optionsContainer .option').forEach((li, idx) => {
+          if (correctIndices.includes(idx)) li.classList.add('correct');
+        });
+      }
+
+      if (q.explanation) {
+        const flashcardAnswerEl = document.getElementById('flashcardAnswer');
+        const expDiv = document.createElement('div');
+        expDiv.style.marginTop = '8px';
+        expDiv.innerHTML = `<div class="subtle"><strong>Explanation:</strong> ${q.explanation}</div>`;
+        flashcardAnswerEl.innerHTML = '';
+        flashcardAnswerEl.appendChild(expDiv);
+      }
+
+      renderStats();
+      saveQuizState();
+    }
+
+    function handleMultiAnswer(qIdx) {
+      const q = currentQuestions[qIdx];
+      const feedbackEl = document.getElementById('feedback');
+
+      const selected = Array.from(currentSelection).sort((a, b) => a - b);
+      const correctIndices = (Array.isArray(q.correct)
+        ? q.correct
+        : [q.correct]
+      ).sort((a, b) => a - b);
+
+      const isCorrect =
+        selected.length > 0 &&
+        selected.length === correctIndices.length &&
+        selected.every((v, i) => v === correctIndices[i]);
+
+      document.querySelectorAll('#optionsContainer .option').forEach((li, idx) => {
+        li.classList.remove('correct', 'wrong', 'selected');
+        if (selected.includes(idx) && !correctIndices.includes(idx)) {
+          li.classList.add('wrong');
+        }
+        if (correctIndices.includes(idx)) {
+          li.classList.add('correct');
+        }
+      });
+
+      if (isCorrect) {
+        feedbackEl.textContent = '✅ Correct (all correct options selected)';
+        feedbackEl.classList.remove('wrong-text');
+        feedbackEl.classList.add('correct-text');
+        stats.correct += 1;
+      } else {
+        feedbackEl.textContent = '❌ Wrong (need all correct options, no wrong ones)';
+        feedbackEl.classList.remove('correct-text');
+        feedbackEl.classList.add('wrong-text');
+        stats.wrong += 1;
+        addWeakPoint(qIdx);
+      }
+
+      if (q.explanation) {
+        const flashcardAnswerEl = document.getElementById('flashcardAnswer');
+        const expDiv = document.createElement('div');
+        expDiv.style.marginTop = '8px';
+        expDiv.innerHTML = `<div class="subtle"><strong>Explanation:</strong> ${q.explanation}</div>`;
+        flashcardAnswerEl.innerHTML = '';
+        flashcardAnswerEl.appendChild(expDiv);
+      }
+
+      renderStats();
+      saveQuizState();
+    }
+
+    function showFlashcardAnswer(q) {
+      const flashcardAnswerEl = document.getElementById('flashcardAnswer');
+      flashcardAnswerEl.innerHTML = '';
+
+      const correctIndices = Array.isArray(q.correct)
+        ? q.correct
+        : [q.correct];
+
+      const list = document.createElement('ul');
+      list.style.listStyle = 'none';
+      list.style.padding = '0';
+      list.style.margin = '8px 0';
+      q.options.forEach((opt, idx) => {
+        const li = document.createElement('li');
+        const isCorrect = correctIndices.includes(idx);
+        li.innerHTML = isCorrect
+          ? `<strong>✔ ${opt}</strong>`
+          : `• ${opt}`;
+        list.appendChild(li);
+      });
+
+      const expDiv = document.createElement('div');
+      expDiv.className = 'subtle';
+      expDiv.style.marginTop = '6px';
+      expDiv.innerHTML = `<strong>Explanation:</strong> ${
+        q.explanation || 'Explanation not added yet.'
+      }`;
+
+      flashcardAnswerEl.appendChild(list);
+      flashcardAnswerEl.appendChild(expDiv);
+    }
+
+    function addWeakPoint(qIdx) {
+      const existing = weakPoints.find(w => w.qIdx === qIdx);
+      if (existing) existing.count += 1;
+      else weakPoints.push({ qIdx, count: 1 });
+    }
+
+    function showWeakPoints() {
+      const modal = document.getElementById('weakModal');
+      const list = document.getElementById('weakList');
+
+      list.innerHTML = '';
+      if (!weakPoints.length) {
+        const li = document.createElement('li');
+        li.textContent = 'No weak points yet. Every wrong answer will show up here.';
+        list.appendChild(li);
+      } else {
+        const sorted = [...weakPoints].sort((a, b) => b.count - a.count);
+        sorted.forEach(wp => {
+          const q = currentQuestions[wp.qIdx];
+          const li = document.createElement('li');
+          li.className = 'weak-item';
+
+          const title = document.createElement('div');
+          title.className = 'weak-title';
+          title.textContent = `Q${wp.qIdx + 1} (${wp.count}× missed): ${q.question}`;
+          li.appendChild(title);
+
+          const correctIndices = Array.isArray(q.correct)
+            ? q.correct
+            : [q.correct];
+
+          const optsUl = document.createElement('ul');
+          optsUl.style.listStyle = 'none';
+          optsUl.style.padding = '0';
+          optsUl.style.margin = '4px 0 6px';
+          q.options.forEach((opt, idx) => {
+            const oLi = document.createElement('li');
+            const isCorrect = correctIndices.includes(idx);
+            oLi.innerHTML = isCorrect
+              ? `<strong>✔ ${opt}</strong>`
+              : `• ${opt}`;
+            optsUl.appendChild(oLi);
+          });
+          li.appendChild(optsUl);
+
+          if (q.explanation) {
+            const expDiv = document.createElement('div');
+            expDiv.className = 'subtle';
+            expDiv.textContent = `Explanation: ${q.explanation}`;
+            li.appendChild(expDiv);
+          }
+
+          const btnRow = document.createElement('div');
+          btnRow.className = 'weak-actions';
+
+          const goBtn = document.createElement('button');
+          goBtn.textContent = 'Go to';
+          goBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            jumpToSpecificQuestion(wp.qIdx);
+          });
+
+          const removeBtn = document.createElement('button');
+          removeBtn.textContent = 'Remove';
+          removeBtn.addEventListener('click', () => {
+            removeWeakPoint(wp.qIdx);
+            showWeakPoints();
+            saveQuizState();
+          });
+
+          btnRow.appendChild(goBtn);
+          btnRow.appendChild(removeBtn);
+          li.appendChild(btnRow);
+
+          list.appendChild(li);
+        });
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeWeakPoints() {
+      const modal = document.getElementById('weakModal');
+      modal.classList.add('hidden');
+    }
+
+    function removeWeakPoint(qIdx) {
+      weakPoints = weakPoints.filter(w => w.qIdx !== qIdx);
+    }
+
+    function startRetakeWeakPoints() {
+      if (!weakPoints.length) {
+        alert('No weak points yet – answer some questions wrong first.');
+        return;
+      }
+      inRetakeMode = true;
+      currentOrder = weakPoints.map(w => w.qIdx);
+      currentIndex = 0;
+      renderQuestion();
+    }
+
+    function exitRetakeWeakPoints() {
+      inRetakeMode = false;
+      currentOrder = [...fullOrder];
+      currentIndex = 0;
+      renderQuestion();
+    }
+
+    function nextQuestion() {
+      if (!currentOrder.length) return;
+      if (currentIndex < currentOrder.length - 1) {
+        currentIndex += 1;
+        renderQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      if (!currentOrder.length) return;
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        renderQuestion();
+      }
+    }
+
+    function jumpToQuestionPrompt() {
+      if (!currentOrder.length) return;
+      const total = currentQuestions.length;
+      const input = prompt(`Go to question number (1–${total}):`);
+      if (!input) return;
+      const n = parseInt(input, 10);
+      if (Number.isNaN(n) || n < 1 || n > total) {
+        alert('Invalid question number.');
+        return;
+      }
+      const qIdx = n - 1;
+      const pos = currentOrder.indexOf(qIdx);
+      currentIndex = pos >= 0 ? pos : 0;
+      inRetakeMode = false; // jump is always to full bank
+      renderQuestion();
+    }
+
+    function jumpToSpecificQuestion(qIdx) {
+      const pos = currentOrder.indexOf(qIdx);
+      currentIndex = pos >= 0 ? pos : 0;
+      renderQuestion();
+    }
+
+    function toggleMode() {
+      const btn = document.getElementById('modeToggleBtn');
+      mode = mode === 'quiz' ? 'flashcard' : 'quiz';
+      btn.textContent = `Mode: ${mode === 'quiz' ? 'Quiz' : 'Flashcards'}`;
+      renderQuestion();
+    }
+
+    function initQuizUI() {
+      const selectEl = document.getElementById('quizSelect');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const jumpBtn = document.getElementById('jumpBtn');
+      const weakBtn = document.getElementById('weakBtn');
+      const retakeBtn = document.getElementById('retakeBtn');
+      const exitRetakeBtn = document.getElementById('exitRetakeBtn');
+      const closeWeakBtn = document.getElementById('closeWeakBtn');
+      const retakeInsideWeakBtn = document.getElementById('retakeInsideWeakBtn');
+      const modeToggleBtn = document.getElementById('modeToggleBtn');
+
+      if (!selectEl.options.length) {
+        Object.entries(QUIZ_KEYS).forEach(([key, label]) => {
+          if (!QUESTION_SETS[key]) return;
+          const opt = document.createElement('option');
+          opt.value = key;
+          opt.textContent = label;
+          selectEl.appendChild(opt);
+        });
+      }
+
+      selectEl.value = currentQuizKey;
+      selectEl.addEventListener('change', () => {
+        currentQuizKey = selectEl.value;
+        loadQuizState();
+        renderStats();
+        renderQuestion();
+      });
+
+      prevBtn.addEventListener('click', prevQuestion);
+      nextBtn.addEventListener('click', nextQuestion);
+      jumpBtn.addEventListener('click', jumpToQuestionPrompt);
+      weakBtn.addEventListener('click', showWeakPoints);
+      retakeBtn.addEventListener('click', startRetakeWeakPoints);
+      exitRetakeBtn.addEventListener('click', exitRetakeWeakPoints);
+      closeWeakBtn.addEventListener('click', closeWeakPoints);
+      retakeInsideWeakBtn.addEventListener('click', () => {
+        closeWeakPoints();
+        startRetakeWeakPoints();
+      });
+      modeToggleBtn.addEventListener('click', toggleMode);
+
+      loadQuizState();
+      renderStats();
+      renderQuestion();
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuizUI);
+  </script>
+</body>
+</html>
