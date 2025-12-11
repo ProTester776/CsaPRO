@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>ServiceNow CSA Pro - Professional Exam Prep</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Professional ServiceNow CSA exam preparation with timed exams, analytics, and progress tracking">
+  <link rel="manifest" href="manifest.json">
+  
+  <style>
+    :root {
+      --bg-gradient-1: #4facfe;
+      --bg-gradient-2: #00f2fe;
+      --card-bg: white;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --accent-1: #667eea;
+      --accent-2: #764ba2;
+      --button-gradient-1: #667eea;
+      --button-gradient-2: #764ba2;
+      --option-bg: #f7fafc;
+      --option-hover: #edf2f7;
+      --correct-color: #38a169;
+      --wrong-color: #e53e3e;
+      --shadow-color: rgba(0,0,0,0.25);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      color: var(--text-primary);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 25px 70px var(--shadow-color);
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+    }
+
+    .pro-badge {
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+    }
+
+    .subtitle {
+      color: #718096;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    /* Timer Display */
+    .timer-display {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--card-bg);
+      padding: 15px 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px var(--shadow-color);
+      z-index: 1000;
+      display: none;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-1);
+    }
+
+    .timer-display.active {
+      display: block;
+    }
+
+    .timer-display.warning {
+      color: #f59e0b;
+      animation: pulse 1s infinite;
+    }
+
+    .timer-display.danger {
+      color: #ef4444;
+      animation: pulse 0.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      padding: 25px;
+      border-radius: 15px;
+      border: 2px solid var(--accent-1);
+      text-align: center;
+    }
+
+    .dashboard-value {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Progress Chart */
+    .progress-chart {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .chart-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 15px;
+    }
+
+    .chart-label {
+      min-width: 150px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .chart-track {
+      flex: 1;
+      height: 30px;
+      background: #e2e8f0;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .chart-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+      border-radius: 15px;
+      transition: width 1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* Mode Selector */
+    .mode-selector {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 20px;
+      border: 3px solid var(--accent-1);
+      border-radius: 15px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .mode-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      color: white;
+    }
+
+    .mode-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .mode-desc {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    /* Search Bar */
+    .search-container {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 15px 50px 15px 20px;
+      border-radius: 12px;
+      border: 2px solid #e2e8f0;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-1);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+    }
+
+    /* Bookmark Button */
+    .bookmark-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border: none;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      color: #000;
+      font-size: 1.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .bookmark-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .bookmark-btn.bookmarked {
+      background: #ffd700;
+    }
+
+    /* Export Buttons */
+    .export-section {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .export-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .export-pdf {
+      background: #ef4444;
+      color: white;
+    }
+
+    .export-csv {
+      background: #10b981;
+      color: white;
+    }
+
+    .export-print {
+      background: #6366f1;
+      color: white;
+    }
+
+    /* Streak Badge */
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+      color: white;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    }
+
+    /* Study Goals */
+    .goal-progress {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .goal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .goal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .goal-edit-btn {
+      padding: 8px 16px;
+      background: var(--accent-1);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .goal-bar {
+      height: 40px;
+      background: #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .goal-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      border-radius: 20px;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    /* Reuse existing styles from original */
+    .stats-row {
+      display: flex;
+      justify-content: space-around;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      border-radius: 15px;
+      margin-bottom: 25px;
+      border: 2px solid var(--accent-1);
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .stat strong {
+      color: var(--text-primary);
+      font-size: 1.1rem;
+    }
+
+    #questionCard {
+      padding: 30px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+      border-radius: 16px;
+      border-left: 5px solid var(--accent-1);
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      position: relative;
+    }
+
+    #questionText {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .option-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 18px;
+      background: var(--option-bg);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      border: 2px solid #e5e7eb;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .option-row:hover,
+    .option-row:active {
+      border-color: #a5b4fc;
+      transform: translateX(4px);
+      background: var(--option-hover);
+    }
+
+    .option-row.correct {
+      background: #c6f6d5;
+      border-color: var(--correct-color);
+    }
+
+    .option-row.incorrect {
+      background: #fed7d7;
+      border-color: var(--wrong-color);
+    }
+
+    button {
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--button-gradient-1), var(--button-gradient-2));
+      color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    button:hover:not(:disabled),
+    button:active:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button.secondary {
+      background: white;
+      color: var(--accent-1);
+      border: 2px solid var(--accent-1);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #a0aec0;
+      padding: 0;
+    }
+
+    .tab-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .tab.active {
+      color: var(--accent-1);
+      border-bottom-color: var(--accent-1);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .explanation-btn {
+      background: #3b82f6;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    .explanation-content {
+      display: none;
+      margin-top: 15px;
+      padding: 20px;
+      background: #eff6ff;
+      border-radius: 10px;
+      border-left: 4px solid #3b82f6;
+      line-height: 1.8;
+    }
+
+    .explanation-content.active {
+      display: block;
+    }
+
+    .explanation-content h4 {
+      color: #1e40af;
+      margin-bottom: 10px;
+    }
+
+    .explanation-content p {
+      margin-bottom: 10px;
+      color: #1e3a8a;
+    }
+
+    .explanation-content a {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        max-width: 100%;
+      }
+
+      .card {
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .pro-badge {
+        font-size: 0.65rem;
+        padding: 6px 12px;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+      }
+
+      .streak-badge {
+        font-size: 0.95rem;
+        padding: 8px 15px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .dashboard-card {
+        padding: 15px;
+      }
+
+      .dashboard-value {
+        font-size: 1.8rem;
+      }
+
+      .dashboard-label {
+        font-size: 0.75rem;
+      }
+
+      .mode-selector {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .mode-btn {
+        min-width: 100%;
+        padding: 15px;
+      }
+
+      .mode-title {
+        font-size: 1rem;
+      }
+
+      .mode-desc {
+        font-size: 0.8rem;
+      }
+
+      .goal-progress {
+        padding: 15px;
+      }
+
+      .goal-title {
+        font-size: 1rem;
+      }
+
+      .progress-chart {
+        padding: 15px;
+      }
+
+      .chart-label {
+        min-width: 100px;
+        font-size: 0.85rem;
+      }
+
+      .chart-fill {
+        font-size: 0.75rem;
+      }
+
+      .search-input {
+        padding: 12px 45px 12px 15px;
+        font-size: 0.9rem;
+      }
+
+      #questionCard {
+        padding: 20px;
+      }
+
+      #questionCard > div:first-child {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      #questionCounter {
+        font-size: 1rem;
+      }
+
+      #questionCard > div:first-child > div {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      #gotoInput {
+        width: 70px;
+        padding: 6px;
+        font-size: 0.85rem;
+      }
+
+      .bookmark-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      button {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+      }
+
+      button.secondary {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+
+      #questionText {
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      .option-row {
+        padding: 12px 15px;
+        gap: 10px;
+        font-size: 0.95rem;
+      }
+
+      .timer-display {
+        top: 10px;
+        right: 10px;
+        padding: 10px 15px;
+        font-size: 1.2rem;
+      }
+
+      .export-section {
+        flex-direction: column;
+      }
+
+      .export-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 20px;
+        max-height: 90vh;
+      }
+
+      .modal-header h2 {
+        font-size: 1.3rem;
+      }
+
+      .tab-container {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 5px;
+      }
+
+      .tab {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+
+      .explanation-btn {
+        width: 100%;
+        font-size: 0.8rem;
+      }
+
+      .explanation-content {
+        padding: 15px;
+        font-size: 0.9rem;
+      }
+
+      /* Improve touch targets */
+      input[type="radio"],
+      input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        min-height: 20px;
+      }
+
+      /* Category select and controls on mobile */
+      .card > div[style*="display: flex"] {
+        flex-direction: column;
+      }
+
+      #categorySelect {
+        width: 100% !important;
+        min-width: 100% !important;
+        font-size: 0.9rem;
+      }
+
+      /* Stack buttons vertically on small screens */
+      .card > div:has(#btnPrev) {
+        flex-direction: column;
+      }
+
+      #btnPrev, #btnSubmit, #btnNext {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .dashboard-value {
+        font-size: 1.5rem;
+      }
+
+      .chart-label {
+        min-width: 80px;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Timer Display -->
+    <div id="timerDisplay" class="timer-display">
+      <span id="timerText">00:00:00</span>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+      <h1>
+        <span class="pro-badge">PRO</span>
+        ServiceNow CSA Pro
+      </h1>
+      <div class="subtitle">
+        🔥 <span class="streak-badge">🔥 <span id="streakDays">0</span> Day Streak!</span>
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="mode-selector">
+        <div class="mode-btn active" onclick="selectMode('practice')" data-mode="practice">
+          <div class="mode-title">📚 Practice Mode</div>
+          <div class="mode-desc">Study at your own pace with instant feedback</div>
+        </div>
+        <div class="mode-btn" onclick="selectMode('exam')" data-mode="exam">
+          <div class="mode-title">⏱️ Timed Exam</div>
+          <div class="mode-desc">90-minute real exam simulation</div>
+        </div>
+        <div class="mode-btn" onclick="selectMode('smart')" data-mode="smart">
+          <div class="mode-title">🧠 Smart Study</div>
+          <div class="mode-desc">AI-powered spaced repetition</div>
+        </div>
+      </div>
+
+      <!-- Daily Goal Progress -->
+      <div class="goal-progress">
+        <div class="goal-header">
+          <div class="goal-title">📅 Daily Goal: <span id="dailyGoalText">20 questions</span></div>
+          <button class="goal-edit-btn" onclick="editDailyGoal()">Edit Goal</button>
+        </div>
+        <div class="goal-bar">
+          <div class="goal-fill" id="goalFill" style="width: 0%">0/20</div>
+        </div>
+      </div>
+
+      <!-- Dashboard Stats -->
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <div class="dashboard-value" id="totalAnswered">0</div>
+          <div class="dashboard-label">Total Answered</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="dashboard-value" id="accuracyRate">0%</div>
+          <div class="dashboard-label">Accuracy Rate</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="dashboard-value" id="studyTime">0h 0m</div>
+          <div class="dashboard-label">Study Time</div>
+        </div>
+        <div class="dashboard-card">
+          <div class="dashboard-value" id="bookmarkedCount">0</div>
+          <div class="dashboard-label">Bookmarked</div>
+        </div>
+      </div>
+
+      <!-- Progress Chart by Category -->
+      <div class="progress-chart">
+        <h3 style="margin-bottom: 20px; color: var(--text-primary);">📊 Progress by Category</h3>
+        <div class="chart-bar">
+          <div class="chart-label">CSA Exam</div>
+          <div class="chart-track">
+            <div class="chart-fill" id="chart-csa_exam" style="width: 0%">0%</div>
+          </div>
+        </div>
+        <div class="chart-bar">
+          <div class="chart-label">CSA Dumps 194</div>
+          <div class="chart-track">
+            <div class="chart-fill" id="chart-csa_dumps_194" style="width: 0%">0%</div>
+          </div>
+        </div>
+        <div class="chart-bar">
+          <div class="chart-label">SkillCert</div>
+          <div class="chart-track">
+            <div class="chart-fill" id="chart-skillcert" style="width: 0%">0%</div>
+          </div>
+        </div>
+        <div class="chart-bar">
+          <div class="chart-label">YouTube Dumps</div>
+          <div class="chart-track">
+            <div class="chart-fill" id="chart-youtube_dumps" style="width: 0%">0%</div>
+          </div>
+        </div>
+        <div class="chart-bar">
+          <div class="chart-label">Other Sources</div>
+          <div class="chart-track">
+            <div class="chart-fill" id="chart-other_sources" style="width: 0%">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search questions by keyword...">
+        <span class="search-icon">🔍</span>
+      </div>
+
+      <!-- Category & Controls -->
+      <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;">
+        <select id="categorySelect" style="flex: 1; min-width: 200px; padding: 12px; border-radius: 10px; border: 2px solid #e2e8f0;">
+          <option value="csa_exam">CSA Exam</option>
+          <option value="csa_dumps_194">CSA Dumps 194</option>
+          <option value="skillcert">SkillCert</option>
+          <option value="youtube_dumps">YouTube Dumps</option>
+          <option value="other_sources">Other Sources</option>
+          <option value="bookmarked">⭐ Bookmarked Questions ({{count}})</option>
+        </select>
+        <button onclick="resumeLastSession()" class="secondary">↩️ Resume</button>
+        <button onclick="showDashboardModal()" class="secondary">📊 Dashboard</button>
+        <button onclick="resetStats()" class="secondary" style="background: #ef4444; color: white;">🔄 Reset</button>
+      </div>
+
+      <!-- Question Card -->
+      <div id="questionCard">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+          <div id="questionCounter" style="font-weight: 700; color: var(--accent-1); font-size: 1.1rem;">1/347</div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="number" id="gotoInput" placeholder="Go to #" min="1" style="width: 80px; padding: 8px; border-radius: 8px; border: 2px solid #e2e8f0; font-size: 0.9rem;">
+            <button onclick="goToQuestion()" class="secondary" style="padding: 8px 16px; font-size: 0.85rem;">🎯 Go</button>
+            <button onclick="showWeakPointsModal()" class="secondary" style="padding: 8px 16px; font-size: 0.85rem;">📊 Weak Points</button>
+            <button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark()" style="position: relative; top: 0; right: 0;">☆</button>
+          </div>
+        </div>
+        <div id="questionText">Loading...</div>
+        <div id="optionsContainer"></div>
+      </div>
+
+      <!-- Controls -->
+      <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <button id="btnPrev" class="secondary">← Previous</button>
+        <button id="btnSubmit">Check Answer</button>
+        <button id="btnNext" class="secondary">Next →</button>
+      </div>
+
+      <div id="feedback" style="padding: 15px; border-radius: 10px; margin-top: 15px; display: none;"></div>
+
+      <!-- Export Section -->
+      <div class="export-section">
+        <button class="export-btn export-pdf" onclick="exportToPDF()">📄 Export to PDF</button>
+        <button class="export-btn export-csv" onclick="exportToCSV()">📊 Export to CSV</button>
+        <button class="export-btn export-print" onclick="printResults()">🖨️ Print Study Sheet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Modal -->
+  <div id="dashboardModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📊 Complete Dashboard</h2>
+        <button class="close-modal" onclick="closeDashboardModal()">×</button>
+      </div>
+      
+      <div class="tab-container">
+        <button class="tab active" onclick="switchTab('overview')">Overview</button>
+        <button class="tab" onclick="switchTab('weak')">Weak Points</button>
+        <button class="tab" onclick="switchTab('bookmarks')">Bookmarks</button>
+        <button class="tab" onclick="switchTab('history')">Performance</button>
+      </div>
+
+      <div id="tab-overview" class="tab-content active">
+        <h3>Performance Overview</h3>
+        <div id="overviewContent">Loading...</div>
+      </div>
+
+      <div id="tab-weak" class="tab-content">
+        <h3>Weak Points Analysis</h3>
+        <div id="weakContent">Loading...</div>
+      </div>
+
+      <div id="tab-bookmarks" class="tab-content">
+        <h3>Bookmarked Questions</h3>
+        <div id="bookmarksContent">Loading...</div>
+      </div>
+
+      <div id="tab-history" class="tab-content">
+        <h3>Performance by Mode & Category</h3>
+        <div id="historyContent">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weak Points Modal -->
+  <div id="weakPointsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📊 Weak Points Analysis</h2>
+        <button class="close-modal" onclick="closeWeakPointsModal()">×</button>
+      </div>
+      <div id="weakPointsList" style="max-height: 400px; overflow-y: auto;"></div>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script>
+    // Remove duplicates
+    function removeDuplicates(questionSets) {
+      const seen = new Set();
+      const deduped = {};
+      const normalize = (text) => text.toLowerCase().trim().replace(/\s+/g, ' ');
+      
+      Object.keys(questionSets).forEach(category => {
+        deduped[category] = [];
+        questionSets[category].forEach((q) => {
+          const key = normalize(q.question);
+          if (!seen.has(key)) {
+            seen.add(key);
+            deduped[category].push({...q, id: deduped[category].length + 1});
+          }
+        });
+      });
+      
+      return deduped;
+    }
+
+    const DEDUPED_QUESTIONS = removeDuplicates(QUESTION_SETS);
+
+    // Pro Features State
+    let currentMode = 'practice';
+    let examStartTime = null;
+    let examDuration = 90 * 60 * 1000; // 90 minutes
+    let timerInterval = null;
+    let studyStartTime = Date.now();
+    let totalStudyTime = parseInt(localStorage.getItem('totalStudyTime') || '0');
+    let dailyGoal = parseInt(localStorage.getItem('dailyGoal') || '20');
+    let dailyProgress = JSON.parse(localStorage.getItem('dailyProgress') || '{}');
+    let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '{}');
+    let studyHistory = JSON.parse(localStorage.getItem('studyHistory') || '[]');
+    let categoryProgress = JSON.parse(localStorage.getItem('categoryProgress') || '{}');
+    let lastStudyDate = localStorage.getItem('lastStudyDate') || '';
+    let streakDays = parseInt(localStorage.getItem('streakDays') || '0');
+    let modeStats = JSON.parse(localStorage.getItem('modeStats') || '{"practice": {}, "exam": {}, "smart": {}}');
+    let examQuestions = [];
+    let lastSessionKey = '';
+    let weakTopics = JSON.parse(localStorage.getItem('weakTopics') || '{}');
+    let topicMastery = JSON.parse(localStorage.getItem('topicMastery') || '{}');
+
+    // Initialize category progress
+    Object.keys(DEDUPED_QUESTIONS).forEach(cat => {
+      if (!categoryProgress[cat]) {
+        categoryProgress[cat] = { answered: 0, correct: 0, total: DEDUPED_QUESTIONS[cat].length };
+      }
+    });
+
+    // App state
+    let currentCategory = 'csa_exam';
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let userAnswers = {};
+    let weakPoints = JSON.parse(localStorage.getItem('weakPoints') || '{}');
+    let customAnswers = JSON.parse(localStorage.getItem('customAnswers') || '{}');
+
+    // Update streak
+    function updateStreak() {
+      const today = new Date().toDateString();
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      
+      if (lastStudyDate === today) {
+        // Already studied today
+      } else if (lastStudyDate === yesterday) {
+        // Consecutive day
+        streakDays++;
+        localStorage.setItem('streakDays', streakDays);
+      } else {
+        // Streak broken
+        streakDays = 1;
+        localStorage.setItem('streakDays', '1');
+      }
+      
+      lastStudyDate = today;
+      localStorage.setItem('lastStudyDate', today);
+      document.getElementById('streakDays').textContent = streakDays;
+    }
+
+    // Update daily progress
+    function updateDailyProgress() {
+      const today = new Date().toDateString();
+      if (!dailyProgress[today]) dailyProgress[today] = 0;
+      dailyProgress[today]++;
+      localStorage.setItem('dailyProgress', JSON.stringify(dailyProgress));
+      
+      const progress = dailyProgress[today];
+      const percentage = Math.min((progress / dailyGoal) * 100, 100);
+      document.getElementById('goalFill').style.width = percentage + '%';
+      document.getElementById('goalFill').textContent = `${progress}/${dailyGoal}`;
+      
+      if (progress >= dailyGoal) {
+        document.getElementById('goalFill').textContent = '✅ Goal Complete!';
+      }
+    }
+
+    function editDailyGoal() {
+      const newGoal = prompt('Set your daily question goal:', dailyGoal);
+      if (newGoal && !isNaN(newGoal) && newGoal > 0) {
+        dailyGoal = parseInt(newGoal);
+        localStorage.setItem('dailyGoal', dailyGoal);
+        document.getElementById('dailyGoalText').textContent = `${dailyGoal} questions`;
+        updateDailyProgress();
+      }
+    }
+
+    // Mode selection
+    function selectMode(mode) {
+      // Stop existing timer if any
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      document.getElementById('timerDisplay').classList.remove('active', 'warning', 'danger');
+      
+      currentMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+      
+      if (mode === 'exam') {
+        if (confirm('Start 90-minute timed exam with 60 NEW questions? Timer will start immediately.')) {
+          // Reset exam stats
+          if (!modeStats['exam']) modeStats['exam'] = {};
+          modeStats['exam']['exam_session'] = { answered: 0, correct: 0, total: 60 };
+          localStorage.setItem('modeStats', JSON.stringify(modeStats));
+          
+          // Generate fresh questions
+          generateExamQuestions();
+          displayQuestion();
+          updateDashboard();
+          startTimedExam();
+        } else {
+          // Revert to practice mode
+          selectMode('practice');
+        }
+      } else if (mode === 'smart') {
+        loadSmartStudyQuestions();
+      } else {
+        loadCategory();
+      }
+    }
+
+    // Generate 60 shuffled questions following CSA blueprint
+    function generateExamQuestions() {
+      // CSA Blueprint percentages
+      const blueprint = {
+        'Application Development': 12,  // 20% of 60 = 12
+        'Collaboration': 12,            // 20% of 60 = 12
+        'Database': 9,                  // 15% of 60 = 9
+        'Self-Service': 9,              // 15% of 60 = 9
+        'CMDB': 12,                     // 20% of 60 = 12
+        'Other': 6                      // 10% of 60 = 6
+      };
+      
+      // Collect all questions from all categories
+      const allQuestions = [];
+      Object.keys(DEDUPED_QUESTIONS).forEach(cat => {
+        DEDUPED_QUESTIONS[cat].forEach((q, idx) => {
+          allQuestions.push({ ...q, category: cat, originalIndex: idx });
+        });
+      });
+      
+      // Shuffle all questions
+      const shuffled = allQuestions.sort(() => Math.random() - 0.5);
+      
+      // Take first 60 questions
+      examQuestions = shuffled.slice(0, 60).map((q, idx) => ({
+        ...q,
+        examNumber: idx + 1
+      }));
+      
+      currentQuestions = examQuestions;
+      currentIndex = 0;
+      userAnswers = {};
+      
+      // Reset exam stats
+      if (!modeStats['exam']) modeStats['exam'] = {};
+      modeStats['exam']['exam_session'] = { answered: 0, correct: 0, total: 60 };
+      localStorage.setItem('modeStats', JSON.stringify(modeStats));
+    }
+
+    // Timed Exam
+    function startTimedExam() {
+      examStartTime = Date.now();
+      document.getElementById('timerDisplay').classList.add('active');
+      
+      timerInterval = setInterval(() => {
+        const elapsed = Date.now() - examStartTime;
+        const remaining = examDuration - elapsed;
+        
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          alert('⏰ Time\'s up! Exam finished.');
+          finishExam();
+          return;
+        }
+        
+        const hours = Math.floor(remaining / 3600000);
+        const minutes = Math.floor((remaining % 3600000) / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+        
+        document.getElementById('timerText').textContent = 
+          `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        const timerDisplay = document.getElementById('timerDisplay');
+        if (remaining < 300000) { // 5 minutes
+          timerDisplay.classList.add('danger');
+        } else if (remaining < 900000) { // 15 minutes
+          timerDisplay.classList.add('warning');
+          timerDisplay.classList.remove('danger');
+        }
+      }, 1000);
+    }
+
+    function finishExam() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      document.getElementById('timerDisplay').classList.remove('active', 'warning', 'danger');
+      
+      // Calculate score
+      const examStats = modeStats['exam']?.['exam_session'] || { answered: 0, correct: 0, total: 60 };
+      const score = examStats.answered > 0 ? Math.round((examStats.correct / examStats.answered) * 100) : 0;
+      const passed = score >= 70;
+      
+      const result = passed 
+        ? `🎉 CONGRATULATIONS! YOU PASSED! 🎉\n\nScore: ${score}% (${examStats.correct}/${examStats.answered} correct)\n\nYou achieved the passing score of 70% or higher!`
+        : `❌ EXAM FAILED\n\nScore: ${score}% (${examStats.correct}/${examStats.answered} correct)\n\nYou need 70% or higher to pass. Keep studying and try again!`;
+      
+      alert(result);
+      
+      // Return to practice mode
+      currentMode = 'practice';
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('[data-mode="practice"]').classList.add('active');
+      loadCategory();
+    }
+
+    // Bookmarks
+    function toggleBookmark() {
+      const q = currentQuestions[currentIndex];
+      const actualCategory = q.category || currentCategory;
+      const actualIndex = q.originalIndex !== undefined ? q.originalIndex : currentIndex;
+      const qKey = `${actualCategory}_${actualIndex}`;
+      const btn = document.getElementById('bookmarkBtn');
+      
+      if (!bookmarks[qKey]) {
+        bookmarks[qKey] = {
+          question: q,
+          category: actualCategory,
+          index: actualIndex,
+          timestamp: Date.now()
+        };
+        btn.textContent = '★';
+        btn.classList.add('bookmarked');
+        alert('Question bookmarked! View all bookmarks by selecting "⭐ Bookmarked Questions" from the category dropdown.');
+      } else {
+        delete bookmarks[qKey];
+        btn.textContent = '☆';
+        btn.classList.remove('bookmarked');
+      }
+      
+      localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+      updateDashboard();
+      updateBookmarkCount();
+    }
+
+    // Smart Study Mode - Focus on weak topics with related questions
+    function loadSmartStudyQuestions() {
+      const weakQuestions = [];
+      const relatedQuestions = [];
+      
+      // Get all questions from weak points
+      Object.keys(weakPoints).forEach(cat => {
+        if (weakPoints[cat] && weakPoints[cat].length > 0) {
+          weakPoints[cat].forEach(idx => {
+            if (DEDUPED_QUESTIONS[cat] && DEDUPED_QUESTIONS[cat][idx]) {
+              const q = DEDUPED_QUESTIONS[cat][idx];
+              weakQuestions.push({ ...q, category: cat, originalIndex: idx, isWeak: true });
+              
+              // Find related questions from same category (topic)
+              DEDUPED_QUESTIONS[cat].forEach((relatedQ, relatedIdx) => {
+                if (relatedIdx !== idx && !weakPoints[cat].includes(relatedIdx)) {
+                  // Extract key terms from weak question
+                  const weakTerms = q.question.toLowerCase().match(/\b\w{4,}\b/g) || [];
+                  const relatedText = relatedQ.question.toLowerCase();
+                  
+                  // If related question shares keywords, include it
+                  const hasRelatedTerms = weakTerms.some(term => relatedText.includes(term));
+                  if (hasRelatedTerms || Math.random() < 0.3) { // 30% chance to include random from category
+                    relatedQuestions.push({ ...relatedQ, category: cat, originalIndex: relatedIdx, isRelated: true });
+                  }
+                }
+              });
+            }
+          });
+        }
+      });
+      
+      if (weakQuestions.length === 0) {
+        alert('🎉 No weak points found! Starting with all questions to find areas for improvement.');
+        const allQuestions = [];
+        Object.keys(DEDUPED_QUESTIONS).forEach(cat => {
+          DEDUPED_QUESTIONS[cat].forEach((q, idx) => {
+            allQuestions.push({ ...q, category: cat, originalIndex: idx });
+          });
+        });
+        currentQuestions = allQuestions.sort(() => Math.random() - 0.5);
+      } else {
+        // Combine weak questions with related questions (limit related to avoid too many)
+        const limitedRelated = relatedQuestions.sort(() => Math.random() - 0.5).slice(0, weakQuestions.length * 2);
+        const combined = [...weakQuestions, ...limitedRelated];
+        currentQuestions = combined.sort(() => Math.random() - 0.5);
+        alert(`🧠 Smart Study Mode: ${weakQuestions.length} weak questions + ${limitedRelated.length} related topic questions!`);
+      }
+      
+      currentIndex = 0;
+      userAnswers = {};
+      displayQuestion();
+    }
+
+    // Update dashboard stats
+    function updateDashboard() {
+      // Get stats for current mode and category
+      if (!modeStats[currentMode]) modeStats[currentMode] = {};
+      
+      // For exam mode, use 'exam_session', otherwise use current category
+      const statKey = currentMode === 'exam' ? 'exam_session' : currentCategory;
+      if (!modeStats[currentMode][statKey]) {
+        modeStats[currentMode][statKey] = { answered: 0, correct: 0 };
+      }
+      
+      const stats = modeStats[currentMode][statKey];
+      const totalAnswered = stats.answered || 0;
+      const totalCorrect = stats.correct || 0;
+      
+      document.getElementById('totalAnswered').textContent = totalAnswered;
+      document.getElementById('accuracyRate').textContent = 
+        totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) + '%' : '0%';
+      
+      // Study time
+      const hours = Math.floor(totalStudyTime / 3600000);
+      const minutes = Math.floor((totalStudyTime % 3600000) / 60000);
+      document.getElementById('studyTime').textContent = `${hours}h ${minutes}m`;
+      
+      // Bookmarks
+      document.getElementById('bookmarkedCount').textContent = Object.keys(bookmarks).length;
+      
+      // Category progress
+      Object.keys(categoryProgress).forEach(cat => {
+        const prog = categoryProgress[cat];
+        const percentage = prog.total > 0 ? Math.round((prog.answered / prog.total) * 100) : 0;
+        const elem = document.getElementById(`chart-${cat}`);
+        if (elem) {
+          elem.style.width = percentage + '%';
+          elem.textContent = percentage + '%';
+        }
+      });
+    }
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      if (query.length < 2) {
+        if (currentMode !== 'exam' && currentMode !== 'smart') {
+          loadCategory();
+        }
+        return;
+      }
+      
+      // Search across all questions
+      const results = [];
+      Object.keys(DEDUPED_QUESTIONS).forEach(cat => {
+        DEDUPED_QUESTIONS[cat].forEach((q, idx) => {
+          if (q.question.toLowerCase().includes(query) || 
+              q.options.some(opt => opt.toLowerCase().includes(query))) {
+            results.push({ ...q, category: cat, originalIndex: idx });
+          }
+        });
+      });
+      
+      if (results.length > 0) {
+        currentQuestions = results;
+        currentIndex = 0;
+        displayQuestion();
+        alert(`Found ${results.length} question(s) matching "${query}"`);
+      } else {
+        alert(`No questions found matching "${query}"`);
+      }
+    });
+
+    // Export functions
+    function exportToPDF() {
+      alert('📄 PDF export feature! This would generate a professional PDF report with your stats, weak points, and study progress.');
+    }
+
+    function exportToCSV() {
+      let csv = 'Category,Question,Your Answer,Correct Answer,Result\n';
+      studyHistory.forEach(item => {
+        csv += `"${item.category}","${item.question}","${item.userAnswer}","${item.correct}","${item.result}"\n`;
+      });
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'servicenow_csa_results.csv';
+      a.click();
+    }
+
+    function printResults() {
+      window.print();
+    }
+
+    // Modal functions
+    function showDashboardModal() {
+      document.getElementById('dashboardModal').classList.add('active');
+      loadDashboardData();
+    }
+
+    function closeDashboardModal() {
+      document.getElementById('dashboardModal').classList.remove('active');
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+
+    function loadDashboardData() {
+      // Overview
+      let overview = '<div style="padding: 20px;">';
+      overview += '<p><strong>Total Questions:</strong> ' + Object.values(DEDUPED_QUESTIONS).reduce((sum, arr) => sum + arr.length, 0) + '</p>';
+      
+      // Calculate total stats across all modes
+      let totalAnswered = 0;
+      let totalCorrect = 0;
+      Object.keys(modeStats).forEach(mode => {
+        Object.keys(modeStats[mode]).forEach(cat => {
+          totalAnswered += modeStats[mode][cat].answered || 0;
+          totalCorrect += modeStats[mode][cat].correct || 0;
+        });
+      });
+      
+      overview += '<p><strong>Total Questions Answered:</strong> ' + totalAnswered + '</p>';
+      overview += '<p><strong>Overall Accuracy:</strong> ' + (totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0) + '%</p>';
+      overview += '<p><strong>Current Streak:</strong> ' + streakDays + ' days 🔥</p>';
+      overview += '<p><strong>Weak Points:</strong> ' + Object.values(weakPoints).reduce((sum, arr) => sum + arr.length, 0) + ' questions</p>';
+      overview += '<p><strong>Bookmarked:</strong> ' + Object.keys(bookmarks).length + ' questions</p>';
+      overview += '</div>';
+      document.getElementById('overviewContent').innerHTML = overview;
+      
+      // Weak points
+      let weak = '<div style="padding: 20px;">';
+      Object.keys(weakPoints).forEach(cat => {
+        if (weakPoints[cat] && weakPoints[cat].length > 0) {
+          weak += `<p><strong>${cat.replace(/_/g, ' ').toUpperCase()}:</strong> ${weakPoints[cat].length} questions</p>`;
+        }
+      });
+      if (Object.keys(weakPoints).length === 0) {
+        weak = '<p style="padding: 20px;">No weak points yet! 💪</p>';
+      }
+      weak += '</div>';
+      document.getElementById('weakContent').innerHTML = weak;
+      
+      // Bookmarks
+      let bookmarkHTML = '<div style="padding: 20px;">';
+      const bookmarkKeys = Object.keys(bookmarks);
+      if (bookmarkKeys.length === 0) {
+        bookmarkHTML = '<p style="padding: 20px;">No bookmarks yet. Use the ☆ button to bookmark questions!</p>';
+      } else {
+        bookmarkKeys.forEach(key => {
+          const bm = bookmarks[key];
+          bookmarkHTML += `<div style="margin-bottom: 15px; padding: 15px; background: #f7fafc; border-radius: 8px; border-left: 4px solid #ffd700;">
+            <div style="margin-bottom: 10px;"><strong>${bm.category.replace(/_/g, ' ').toUpperCase()} - Q${bm.index + 1}</strong></div>
+            <div style="margin-bottom: 10px;">${bm.question.question}</div>
+            <button onclick="jumpToQuestion('${bm.category}', ${bm.index})" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">📖 View Question</button>
+          </div>`;
+        });
+      }
+      bookmarkHTML += '</div>';
+      document.getElementById('bookmarksContent').innerHTML = bookmarkHTML;
+      
+      // History - Show mode-specific stats instead of broken history
+      let historyHTML = '<div style="padding: 20px;">';
+      historyHTML += '<h3 style="margin-bottom: 15px; color: var(--accent-1);">📊 Performance by Mode & Category</h3>';
+      
+      Object.keys(modeStats).forEach(mode => {
+        const modeData = modeStats[mode];
+        if (Object.keys(modeData).length > 0) {
+          historyHTML += `<h4 style="margin-top: 20px; color: var(--text-primary); text-transform: capitalize;">${mode} Mode</h4>`;
+          
+          Object.keys(modeData).forEach(cat => {
+            const stats = modeData[cat];
+            const accuracy = stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0;
+            const color = accuracy >= 70 ? '#10b981' : accuracy >= 50 ? '#f59e0b' : '#ef4444';
+            
+            historyHTML += `<div style="margin: 10px 0; padding: 12px; background: #f7fafc; border-radius: 8px; border-left: 4px solid ${color};">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>${cat.replace(/_/g, ' ').toUpperCase()}</strong>
+                <span style="font-size: 1.2rem; font-weight: 700; color: ${color};">${accuracy}%</span>
+              </div>
+              <div style="margin-top: 5px; color: #64748b; font-size: 0.9rem;">
+                ${stats.correct}/${stats.answered} correct
+              </div>
+            </div>`;
+          });
+        }
+      });
+      
+      if (Object.keys(modeStats).every(mode => Object.keys(modeStats[mode]).length === 0)) {
+        historyHTML += '<p style="padding: 20px; color: #a0aec0;">No practice history yet. Start answering questions!</p>';
+      }
+      
+      historyHTML += '</div>';
+      document.getElementById('historyContent').innerHTML = historyHTML;
+    }
+
+
+
+    // Resume last session
+    function resumeLastSession() {
+      const lastSession = localStorage.getItem('lastSession');
+      if (!lastSession) {
+        alert('No previous session found!');
+        return;
+      }
+      
+      const session = JSON.parse(lastSession);
+      currentMode = session.mode;
+      currentCategory = session.category;
+      currentIndex = session.index;
+      
+      document.getElementById('categorySelect').value = currentCategory;
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`[data-mode="${currentMode}"]`).classList.add('active');
+      
+      if (currentMode === 'exam') {
+        examQuestions = session.questions || [];
+        currentQuestions = examQuestions;
+      } else if (currentMode === 'smart') {
+        loadSmartStudyQuestions();
+      } else {
+        loadCategory();
+      }
+      
+      displayQuestion();
+      alert(`Resumed from question ${currentIndex + 1}`);
+    }
+
+    // Reset stats
+    function resetStats() {
+      if (!confirm('Are you sure you want to reset all stats for this mode and category? This cannot be undone.')) {
+        return;
+      }
+      
+      const modeKey = `${currentMode}_${currentCategory}`;
+      if (modeStats[currentMode] && modeStats[currentMode][currentCategory]) {
+        modeStats[currentMode][currentCategory] = { answered: 0, correct: 0 };
+        localStorage.setItem('modeStats', JSON.stringify(modeStats));
+      }
+      
+      updateDashboard();
+      alert('Stats reset successfully!');
+    }
+
+    // Weak points modal
+    function showWeakPointsModal() {
+      const modal = document.getElementById('weakPointsModal');
+      const list = document.getElementById('weakPointsList');
+      
+      let html = '<div style="padding: 20px;">';
+      let hasWeak = false;
+      
+      if (Object.keys(weakPoints).some(cat => weakPoints[cat] && weakPoints[cat].length > 0)) {
+        html += '<div style="background: #dbeafe; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #3b82f6;">';
+        html += '<strong style="color: #1e40af;">🧠 Tip:</strong> Switch to <strong>Smart Mode</strong> to practice these weak points with related topic questions!';
+        html += '</div>';
+      }
+      
+      Object.keys(weakPoints).forEach(cat => {
+        if (weakPoints[cat] && weakPoints[cat].length > 0) {
+          hasWeak = true;
+          html += `<h3 style="margin-top: 20px; color: var(--accent-1);">${cat.replace(/_/g, ' ').toUpperCase()} (${weakPoints[cat].length} questions)</h3>`;
+          
+          weakPoints[cat].forEach(idx => {
+            const q = DEDUPED_QUESTIONS[cat][idx];
+            if (q) {
+              const qKey = `${cat}_${idx}`;
+              html += `<div style="margin: 15px 0; padding: 15px; background: #f7fafc; border-radius: 10px; border-left: 4px solid #ef4444;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div style="flex: 1;">
+                    <strong>Q${idx + 1}:</strong> ${q.question}
+                  </div>
+                  <div style="display: flex; gap: 10px; margin-left: 15px; flex-shrink: 0;">
+                    <button onclick="jumpToQuestion('${cat}', ${idx})" style="padding: 5px 12px; font-size: 0.85rem;">📖 View</button>
+                    <button onclick="editAnswer('${cat}', ${idx})" style="padding: 5px 12px; font-size: 0.85rem; background: #10b981;">✏️ Edit</button>
+                    <button onclick="removeFromWeak('${cat}', ${idx})" style="padding: 5px 12px; font-size: 0.85rem; background: #ef4444;">✓ Learned</button>
+                  </div>
+                </div>
+                <button class="explanation-btn" onclick="toggleExplanation('${qKey}')">💡 Show Explanation</button>
+                <div id="explanation-${qKey}" class="explanation-content">
+                  ${generateExplanation(q, cat)}
+                </div>
+              </div>`;
+            }
+          });
+        }
+      });
+      
+      if (!hasWeak) {
+        html += '<p style="text-align: center; padding: 40px; color: #a0aec0; font-size: 1.1rem;">🎉 No weak points! You\'re doing great!</p>';
+      }
+      
+      html += '</div>';
+      list.innerHTML = html;
+      modal.classList.add('active');
+    }
+
+    function closeWeakPointsModal() {
+      document.getElementById('weakPointsModal').classList.remove('active');
+    }
+
+    function goToQuestion() {
+      const input = document.getElementById('gotoInput');
+      const num = parseInt(input.value);
+      
+      if (isNaN(num) || num < 1 || num > currentQuestions.length) {
+        alert(`Please enter a number between 1 and ${currentQuestions.length}`);
+        return;
+      }
+      
+      currentIndex = num - 1;
+      displayQuestion();
+      input.value = '';
+    }
+
+    function jumpToQuestion(cat, idx) {
+      // Stop any timer
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      document.getElementById('timerDisplay').classList.remove('active', 'warning', 'danger');
+      
+      // Switch to practice mode
+      currentMode = 'practice';
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('[data-mode="practice"]').classList.add('active');
+      
+      // Set category and load
+      currentCategory = cat;
+      document.getElementById('categorySelect').value = cat;
+      currentQuestions = DEDUPED_QUESTIONS[cat] || [];
+      currentIndex = idx;
+      userAnswers = {};
+      
+      displayQuestion();
+      closeWeakPointsModal();
+      closeDashboardModal();
+      
+      // Focus on question card with smooth scroll
+      setTimeout(() => {
+        const questionCard = document.getElementById('questionCard');
+        if (questionCard) {
+          questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          questionCard.style.animation = 'pulse 0.5s ease-in-out';
+          setTimeout(() => questionCard.style.animation = '', 500);
+        }
+      }, 100);
+    }
+
+    function editAnswer(cat, idx) {
+      const q = DEDUPED_QUESTIONS[cat][idx];
+      if (!q) return;
+      
+      const qKey = `${cat}_${idx}`;
+      let currentCorrect = customAnswers[qKey] || q.correct;
+      
+      let correctAnswerText = '';
+      if (Array.isArray(currentCorrect)) {
+        correctAnswerText = currentCorrect.map(i => String.fromCharCode(65 + i)).join(', ');
+      } else {
+        correctAnswerText = String.fromCharCode(65 + currentCorrect);
+      }
+      
+      const newAnswer = prompt(
+        `Current correct answer: ${correctAnswerText}\n\n` +
+        `Options:\n${q.options.map((opt, i) => `${String.fromCharCode(65 + i)}: ${opt}`).join('\n')}\n\n` +
+        `Enter new correct answer (A, B, C, D) or multiple (A,C):`
+      );
+      
+      if (newAnswer) {
+        const normalized = newAnswer.toUpperCase().replace(/\s/g, '');
+        if (normalized.includes(',')) {
+          const indices = normalized.split(',').map(c => c.charCodeAt(0) - 65).filter(i => i >= 0 && i < q.options.length);
+          if (indices.length > 0) {
+            customAnswers[qKey] = indices;
+            DEDUPED_QUESTIONS[cat][idx].correct = indices;
+            localStorage.setItem('customAnswers', JSON.stringify(customAnswers));
+            alert('Answer updated successfully! New answer is now active.');
+            showWeakPointsModal();
+          }
+        } else {
+          const index = normalized.charCodeAt(0) - 65;
+          if (index >= 0 && index < q.options.length) {
+            customAnswers[qKey] = index;
+            DEDUPED_QUESTIONS[cat][idx].correct = index;
+            localStorage.setItem('customAnswers', JSON.stringify(customAnswers));
+            alert('Answer updated successfully! New answer is now active.');
+            showWeakPointsModal();
+          }
+        }
+      }
+    }
+
+    function removeFromWeak(cat, idx) {
+      if (!weakPoints[cat]) return;
+      weakPoints[cat] = weakPoints[cat].filter(i => i !== idx);
+      if (weakPoints[cat].length === 0) delete weakPoints[cat];
+      localStorage.setItem('weakPoints', JSON.stringify(weakPoints));
+      showWeakPointsModal();
+    }
+
+    function toggleExplanation(qKey) {
+      const elem = document.getElementById(`explanation-${qKey}`);
+      if (elem) {
+        elem.classList.toggle('active');
+        const btn = event.target;
+        btn.textContent = elem.classList.contains('active') ? '👁️ Hide Explanation' : '💡 Show Explanation';
+      }
+    }
+
+    function generateExplanation(q, category) {
+      // Generate contextual explanation based on question content
+      const questionLower = q.question.toLowerCase();
+      let explanation = '<h4>📚 Detailed Explanation</h4>';
+      
+      // Detect topic and provide explanation
+      if (questionLower.includes('update set') || questionLower.includes('updateset')) {
+        explanation += '<p><strong>Topic: Update Sets</strong></p>';
+        explanation += '<p>Update Sets are used to move customizations between ServiceNow instances. They capture configuration changes and allow you to preview, commit, and migrate them to other environments.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-application-development/page/build/system-update-sets/concept/system-update-sets.html" target="_blank">📖 ServiceNow Documentation: Update Sets</a></p>';
+      } else if (questionLower.includes('business rule')) {
+        explanation += '<p><strong>Topic: Business Rules</strong></p>';
+        explanation += '<p>Business Rules are server-side logic that run when records are queried, updated, inserted, or deleted. They can execute before or after database operations.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-application-development/page/script/business-rules/concept/c_BusinessRules.html" target="_blank">📖 ServiceNow Documentation: Business Rules</a></p>';
+      } else if (questionLower.includes('client script')) {
+        explanation += '<p><strong>Topic: Client Scripts</strong></p>';
+        explanation += '<p>Client Scripts run on the client browser to validate data, provide feedback, and dynamically change form content in real-time.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-application-development/page/script/client-scripts/concept/c_ClientScripts.html" target="_blank">📖 ServiceNow Documentation: Client Scripts</a></p>';
+      } else if (questionLower.includes('ui policy') || questionLower.includes('ui action')) {
+        explanation += '<p><strong>Topic: UI Policies & Actions</strong></p>';
+        explanation += '<p>UI Policies dynamically change form behavior (making fields mandatory, visible, or read-only). UI Actions are buttons, links, or context menu items.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-platform-user-interface/page/administer/form-administration/concept/ui-policies.html" target="_blank">📖 ServiceNow Documentation: UI Policies</a></p>';
+      } else if (questionLower.includes('cmdb') || questionLower.includes('configuration item')) {
+        explanation += '<p><strong>Topic: CMDB</strong></p>';
+        explanation += '<p>The Configuration Management Database (CMDB) stores information about configuration items (CIs) and their relationships in your IT infrastructure.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-servicenow-platform/page/product/configuration-management/concept/c_ITILConfigurationManagement.html" target="_blank">📖 ServiceNow Documentation: CMDB</a></p>';
+      } else if (questionLower.includes('workflow') || questionLower.includes('flow designer')) {
+        explanation += '<p><strong>Topic: Workflow & Flow Designer</strong></p>';
+        explanation += '<p>Workflows automate multi-step processes. Flow Designer is the modern tool for creating flows with a natural language interface.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-automate-lifecycle-events/page/administer/flow-designer/concept/flow-designer.html" target="_blank">📖 ServiceNow Documentation: Flow Designer</a></p>';
+      } else if (questionLower.includes('service catalog')) {
+        explanation += '<p><strong>Topic: Service Catalog</strong></p>';
+        explanation += '<p>The Service Catalog allows users to request items and services through a user-friendly shopping cart interface.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-servicenow-platform/page/product/service-catalog-management/concept/c_IntroductionToServiceCatalog.html" target="_blank">📖 ServiceNow Documentation: Service Catalog</a></p>';
+      } else if (questionLower.includes('acl') || questionLower.includes('access control')) {
+        explanation += '<p><strong>Topic: Access Control (ACL)</strong></p>';
+        explanation += '<p>Access Control Lists (ACLs) define which users can access and modify specific data, applications, and functionality in ServiceNow.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-platform-security/page/administer/contextual-security/concept/access-control-rules.html" target="_blank">📖 ServiceNow Documentation: Access Control</a></p>';
+      } else if (questionLower.includes('gliderecord') || questionLower.includes('glideajax')) {
+        explanation += '<p><strong>Topic: GlideRecord API</strong></p>';
+        explanation += '<p>GlideRecord is the server-side API for database operations. GlideAjax enables asynchronous client-to-server communication.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/bundle/utah-api-reference/page/app-store/dev_portal/API_reference/GlideRecord/concept/c_GlideRecordAPI.html" target="_blank">📖 ServiceNow Documentation: GlideRecord</a></p>';
+      } else {
+        explanation += '<p><strong>General ServiceNow Concept</strong></p>';
+        explanation += '<p>This question tests your understanding of ServiceNow fundamentals. Review the question carefully and understand why each answer option is correct or incorrect.</p>';
+        explanation += '<p><a href="https://docs.servicenow.com/" target="_blank">📖 ServiceNow Documentation Portal</a></p>';
+      }
+      
+      // Add correct answer explanation
+      const correctIndex = Array.isArray(q.correct) ? q.correct : [q.correct];
+      explanation += '<p><strong>Correct Answer(s):</strong> ';
+      explanation += correctIndex.map(i => `<span style="background: #d1fae5; padding: 2px 8px; border-radius: 4px; margin-right: 5px;">${String.fromCharCode(65 + i)}: ${q.options[i]}</span>`).join(' ');
+      explanation += '</p>';
+      
+      return explanation;
+    }
+
+    // Load category
+    function loadCategory() {
+      if (currentCategory === 'bookmarked') {
+        currentQuestions = Object.values(bookmarks).map(bm => ({
+          ...bm.question,
+          category: bm.category,
+          originalIndex: bm.index
+        }));
+        if (currentQuestions.length === 0) {
+          alert('No bookmarked questions yet! Use the ☆ button to bookmark questions.');
+        }
+      } else {
+        currentQuestions = DEDUPED_QUESTIONS[currentCategory] || [];
+      }
+      currentIndex = 0;
+      userAnswers = {};
+      displayQuestion();
+      updateBookmarkCount();
+    }
+    
+    function updateBookmarkCount() {
+      const selector = document.getElementById('categorySelect');
+      const bookmarkOption = selector.querySelector('option[value="bookmarked"]');
+      if (bookmarkOption) {
+        bookmarkOption.textContent = `⭐ Bookmarked Questions (${Object.keys(bookmarks).length})`;
+      }
+    }
+
+    // Display question
+    function displayQuestion() {
+      if (!currentQuestions.length) {
+        document.getElementById('questionText').textContent = 'No questions available.';
+        return;
+      }
+
+      const q = currentQuestions[currentIndex];
+      
+      // Determine the actual category and index for this question
+      const actualCategory = q.category || currentCategory;
+      const actualIndex = q.originalIndex !== undefined ? q.originalIndex : currentIndex;
+      const qKey = `${actualCategory}_${actualIndex}`;
+      
+      // Apply custom answer if exists
+      if (customAnswers[qKey]) {
+        q.correct = customAnswers[qKey];
+      }
+      
+      // Update question counter
+      document.getElementById('questionCounter').textContent = `${currentIndex + 1}/${currentQuestions.length}`;
+      document.getElementById('gotoInput').setAttribute('max', currentQuestions.length);
+      
+      // Save session state
+      localStorage.setItem('lastSession', JSON.stringify({
+        mode: currentMode,
+        category: currentCategory,
+        index: currentIndex,
+        questions: currentMode === 'exam' ? examQuestions : null
+      }));
+      
+      // Update bookmark button using actual category/index
+      const btn = document.getElementById('bookmarkBtn');
+      if (bookmarks[qKey]) {
+        btn.textContent = '★';
+        btn.classList.add('bookmarked');
+      } else {
+        btn.textContent = '☆';
+        btn.classList.remove('bookmarked');
+      }
+      
+      document.getElementById('questionText').textContent = `${currentIndex + 1}. ${q.question}`;
+
+      const isMultiple = Array.isArray(q.correct);
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = '';
+
+      q.options.forEach((opt, i) => {
+        const row = document.createElement('div');
+        row.className = 'option-row';
+        
+        const input = document.createElement('input');
+        input.type = isMultiple ? 'checkbox' : 'radio';
+        input.name = 'answer';
+        input.value = i;
+        input.id = `opt${i}`;
+
+        const label = document.createElement('span');
+        label.textContent = opt;
+
+        row.appendChild(input);
+        row.appendChild(label);
+        row.onclick = () => input.click();
+
+        container.appendChild(row);
+      });
+
+      document.getElementById('feedback').style.display = 'none';
+      document.getElementById('btnPrev').disabled = currentIndex === 0;
+      document.getElementById('btnNext').disabled = currentIndex === currentQuestions.length - 1;
+    }
+
+    // Check answer
+    function checkAnswer() {
+      const q = currentQuestions[currentIndex];
+      const isMultiple = Array.isArray(q.correct);
+
+      const selected = [];
+      document.querySelectorAll('input[name="answer"]:checked').forEach(inp => {
+        selected.push(parseInt(inp.value));
+      });
+
+      if (selected.length === 0) {
+        alert('Please select an answer first.');
+        return;
+      }
+
+      let isCorrect = false;
+      if (isMultiple) {
+        const correctSet = new Set(q.correct);
+        const selectedSet = new Set(selected);
+        isCorrect = correctSet.size === selectedSet.size && 
+                    [...correctSet].every(x => selectedSet.has(x));
+      } else {
+        isCorrect = selected[0] === q.correct;
+      }
+
+      userAnswers[currentIndex] = isCorrect;
+      
+      // Determine actual category
+      const actualCategory = q.category || currentCategory;
+      const actualIndex = q.originalIndex !== undefined ? q.originalIndex : currentIndex;
+
+      // Update mode-specific stats
+      if (!modeStats[currentMode]) modeStats[currentMode] = {};
+      
+      // For exam mode, track under 'exam_session'
+      const statKey = currentMode === 'exam' ? 'exam_session' : actualCategory;
+      if (!modeStats[currentMode][statKey]) {
+        modeStats[currentMode][statKey] = { answered: 0, correct: 0 };
+      }
+      modeStats[currentMode][statKey].answered++;
+      if (isCorrect) modeStats[currentMode][statKey].correct++;
+      localStorage.setItem('modeStats', JSON.stringify(modeStats));
+
+      // Update category progress (global)
+      if (!categoryProgress[actualCategory]) {
+        categoryProgress[actualCategory] = { answered: 0, correct: 0, total: DEDUPED_QUESTIONS[actualCategory]?.length || 0 };
+      }
+      categoryProgress[actualCategory].answered++;
+      if (isCorrect) categoryProgress[actualCategory].correct++;
+      localStorage.setItem('categoryProgress', JSON.stringify(categoryProgress));
+
+      // Add to history
+      studyHistory.push({
+        category: currentCategory,
+        question: q.question,
+        userAnswer: selected,
+        correct: q.correct,
+        result: isCorrect ? 'correct' : 'incorrect',
+        timestamp: Date.now()
+      });
+      localStorage.setItem('studyHistory', JSON.stringify(studyHistory));
+
+      // Update daily progress and streak
+      updateDailyProgress();
+      updateStreak();
+
+      // Visual feedback
+      const options = document.querySelectorAll('.option-row');
+      options.forEach((row, i) => {
+        const correctIndices = isMultiple ? q.correct : [q.correct];
+        if (correctIndices.includes(i)) {
+          row.classList.add('correct');
+        } else if (selected.includes(i)) {
+          row.classList.add('incorrect');
+        }
+      });
+
+      const feedback = document.getElementById('feedback');
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = '#c6f6d5';
+        feedback.style.color = '#22543d';
+        feedback.innerHTML = '✅ Correct!';
+      } else {
+        feedback.style.background = '#fed7d7';
+        feedback.style.color = '#742a2a';
+        const correctLabels = isMultiple 
+          ? q.correct.map(i => String.fromCharCode(65 + i)).join(', ')
+          : String.fromCharCode(65 + q.correct);
+        feedback.innerHTML = `❌ Incorrect. The correct answer is: <strong>${correctLabels}</strong>`;
+
+        // Add to weak points using actual indices
+        const actualCategory = q.category || currentCategory;
+        const actualIndex = q.originalIndex !== undefined ? q.originalIndex : currentIndex;
+        
+        if (!weakPoints[actualCategory]) weakPoints[actualCategory] = [];
+        if (!weakPoints[actualCategory].includes(actualIndex)) {
+          weakPoints[actualCategory].push(actualIndex);
+        }
+        localStorage.setItem('weakPoints', JSON.stringify(weakPoints));
+        
+        // Smart mode: If question answered correctly twice, remove from weak points
+        if (currentMode === 'smart' && isCorrect) {
+          const qKey = `${actualCategory}_${actualIndex}`;
+          if (!topicMastery[qKey]) topicMastery[qKey] = 0;
+          topicMastery[qKey]++;
+          
+          if (topicMastery[qKey] >= 2 && weakPoints[actualCategory]) {
+            weakPoints[actualCategory] = weakPoints[actualCategory].filter(i => i !== actualIndex);
+            if (weakPoints[actualCategory].length === 0) delete weakPoints[actualCategory];
+            localStorage.setItem('weakPoints', JSON.stringify(weakPoints));
+          }
+          
+          localStorage.setItem('topicMastery', JSON.stringify(topicMastery));
+        }
+      }
+
+      updateDashboard();
+    }
+
+    // Event listeners
+    document.getElementById('categorySelect').addEventListener('change', (e) => {
+      currentCategory = e.target.value;
+      loadCategory();
+    });
+
+    document.getElementById('btnPrev').addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        displayQuestion();
+      }
+    });
+
+    document.getElementById('btnNext').addEventListener('click', () => {
+      if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        displayQuestion();
+      }
+    });
+
+    document.getElementById('btnSubmit').addEventListener('click', checkAnswer);
+
+    // Track study time
+    setInterval(() => {
+      const elapsed = Date.now() - studyStartTime;
+      totalStudyTime += 1000;
+      localStorage.setItem('totalStudyTime', totalStudyTime);
+      updateDashboard();
+    }, 1000);
+
+    // Initialize
+    window.addEventListener('load', () => {
+      loadCategory();
+      updateDashboard();
+      updateDailyProgress();
+      updateStreak();
+    });
+  </script>
+</body>
+</html>
